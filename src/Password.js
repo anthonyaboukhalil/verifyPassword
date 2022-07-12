@@ -5,20 +5,15 @@ const Password = ({ onFormSubmit }) => {
   const [conditions, setConditions] = useState(false);
   const [lengthValid, setLengthValid] = useState("danger");
   const [capitalValid, setCapitalValid] = useState("danger");
-  const [char, setChar] = useState("");
+  const [numberValid, setNumberValid] = useState("danger");
+
   // Whenever our input updates, we need to validate it
   useEffect(() => {
     validate();
   }, [input]);
 
   // this method validates our input in real time
-  const checkForUpperCase = () => {
-    if (input.length > 1) {
-      if (/[a-z]/.test(input) && !/[A-Z]/.test(input)) {
-        setCapitalValid("danger");
-      } else setCapitalValid("success");
-    }
-  };
+
   const validate = () => {
     //check for length
     if (input.length >= 6) {
@@ -26,18 +21,9 @@ const Password = ({ onFormSubmit }) => {
     } else {
       setLengthValid("danger");
     }
-
-    //check if there exists an upperCase
+    //check if any of the characters are upperCase
     checkForUpperCase();
-
-    // if (input.length > 1) {
-    //   setChar(input.charAt(input.length - 1));
-    //   console.log(char);
-    // }
-
-    // if (char === char.toUpperCase()) {
-    //   setCapitalValid("success");
-    // }
+    checkForNumber();
   };
 
   const onSubmit = (e) => {
@@ -50,7 +36,18 @@ const Password = ({ onFormSubmit }) => {
       console.log("Checks don't pass");
     }
   };
-
+  const checkForNumber = () => {
+    // if a number exists in the input make it green
+  };
+  const checkForUpperCase = () => {
+    if (input.length >= 1 && isNaN(+input)) {
+      if (input.length >= 1 && /[a-z]/.test(input) && !/[A-Z]/.test(input)) {
+        setCapitalValid("danger");
+      } else setCapitalValid("success");
+    } else {
+      setCapitalValid("danger");
+    }
+  };
   return (
     <div className=" d-flex justify-content-center">
       <form
@@ -65,8 +62,7 @@ const Password = ({ onFormSubmit }) => {
           <li className={`text-${capitalValid}`}>
             Contains an upperCase letter
           </li>
-          <li>6 Characters</li>
-          <li>6 Characters</li>
+          <li className={`text-${capitalValid}`}>Contains a number</li>
         </ul>
         <input
           value={input}
@@ -76,7 +72,6 @@ const Password = ({ onFormSubmit }) => {
           onChange={(e) => setInput(e.target.value)}
         />
       </form>
-      <span>{input?.length}</span>
     </div>
   );
 };
