@@ -7,26 +7,26 @@ const Password = ({ onFormSubmit }) => {
   const [capitalValid, setCapitalValid] = useState("danger");
   const [numberValid, setNumberValid] = useState("danger");
 
-  // Whenever our input updates, we need to validate it
+  // Whenever our input or numberValid updates, we need to validate it
   useEffect(() => {
     validate();
-  }, [input]);
+    checkConditions();
+  }, [input, numberValid]);
 
   // this method validates our input in real time
-
   const validate = () => {
     //check for length
-    if (input.length >= 6) {
-      setLengthValid("success");
-    } else {
-      setLengthValid("danger");
-    }
+    checkForLength();
     //check if any of the characters are upperCase
     checkForUpperCase();
+    // check if input contains a number
     checkForNumber();
-  };
 
+    // checkConditions();
+  };
+  // This method makes sure all conditions are met and then calls the method in App.js
   const onSubmit = (e) => {
+    console.log(conditions);
     if (conditions) {
       e.preventDefault();
       onFormSubmit(input);
@@ -36,8 +36,17 @@ const Password = ({ onFormSubmit }) => {
       console.log("Checks don't pass");
     }
   };
+  const checkForLength = () => {
+    if (input.length >= 6) {
+      setLengthValid("success");
+    } else {
+      setLengthValid("danger");
+    }
+  };
   const checkForNumber = () => {
-    // if a number exists in the input make it green
+    if (/\d/.test(input)) {
+      setNumberValid("success");
+    } else setNumberValid("danger");
   };
   const checkForUpperCase = () => {
     if (input.length >= 1 && isNaN(+input)) {
@@ -48,6 +57,13 @@ const Password = ({ onFormSubmit }) => {
       setCapitalValid("danger");
     }
   };
+  const checkConditions = () => {
+    lengthValid === "success" &&
+    capitalValid === "success" &&
+    numberValid === "success"
+      ? setConditions(true)
+      : setConditions(false);
+  };
   return (
     <div className=" d-flex justify-content-center">
       <form
@@ -55,14 +71,14 @@ const Password = ({ onFormSubmit }) => {
         onSubmit={onSubmit}
       >
         <label className=" col-form-label border-1 border-bottom">
-          Please enter a password that conforms to the following conditions:
+          Please create a password that conforms to the following conditions:
         </label>
         <ul>
           <li className={`text-${lengthValid}`}>Minimum 6 characters</li>
           <li className={`text-${capitalValid}`}>
             Contains an upperCase letter
           </li>
-          <li className={`text-${capitalValid}`}>Contains a number</li>
+          <li className={`text-${numberValid}`}>Contains a number</li>
         </ul>
         <input
           value={input}
