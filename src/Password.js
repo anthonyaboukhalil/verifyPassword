@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-
+import Checkmark from "./svgs/Checkmark";
+import Close from "./svgs/Close";
 const Password = ({ onFormSubmit }) => {
   const [input, setInput] = useState("");
   const [conditions, setConditions] = useState(false);
@@ -65,7 +66,7 @@ const Password = ({ onFormSubmit }) => {
       : setConditions(false);
   };
   return (
-    <div className=" d-flex justify-content-center">
+    <div className=" d-flex justify-content-center ">
       <form
         className=" border border-1 rounded border-secondary col-7 form-control "
         onSubmit={onSubmit}
@@ -73,12 +74,29 @@ const Password = ({ onFormSubmit }) => {
         <label className=" col-form-label border-1 border-bottom">
           Please create a password that conforms to the following conditions:
         </label>
-        <ul>
-          <li className={`text-${lengthValid}`}>Minimum 6 characters</li>
-          <li className={`text-${capitalValid}`}>
-            Contains an upperCase letter
-          </li>
-          <li className={`text-${numberValid}`}>Contains a number</li>
+        <ul className="d-flex flex-column">
+          <div className="d-inline-flex flex-row align-items-center   ">
+            <li className={`text-${lengthValid} list-group-item p-1 `}>
+              Minimum 6 characters
+            </li>
+
+            <Checkmark status={lengthValid} />
+            <Close status={lengthValid} />
+          </div>
+          <div className="d-inline-flex flex-row align-items-center  ">
+            <li className={`text-${capitalValid} list-group-item p-1`}>
+              Contains an upperCase letter
+            </li>
+            <Checkmark status={capitalValid} />
+            <Close status={capitalValid} />
+          </div>
+          <div className="d-inline-flex flex-row align-items-center ">
+            <li className={`text-${numberValid} list-group-item p-1`}>
+              Contains a number
+            </li>
+            <Checkmark status={numberValid} />
+            <Close status={numberValid} />
+          </div>
         </ul>
         <input
           value={input}
